@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cyber Agent - Vulnerability Report</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --ai-blue: #4361ee;
+            --ai-blue-light: #4895ef;
+            --ai-dark: #1d3557;
+            --ai-light: #f1faee;
+            --severity-high: #e63946;
+            --severity-medium: #ffb703;
+            --severity-low: #2a9d8f;
+            --severity-info: #4cc9f0;
+        }
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        .header-custom {
+            background: linear-gradient(120deg, var(--ai-dark), #2a5298);
+            color: white;
+            padding: 2.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header-custom h1 {
+            font-weight: 700;
+        }
+        .header-custom .lead {
+            opacity: 0.9;
+        }
+        
+        /* Stats Section */
+        .stats-container {
+            margin-bottom: 2.5rem;
+        }
+        .stat-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            border: none;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .stat-card-header {
+            padding: 1rem 1.25rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .stat-card-body {
+            padding: 1.25rem;
+        }
+        .stat-high .stat-card-header { background-color: var(--severity-high); color: white; }
+        .stat-medium .stat-card-header { background-color: var(--severity-medium); color: #000; }
+        .stat-low .stat-card-header { background-color: var(--severity-low); color: white; }
+        .stat-info .stat-card-header { background-color: var(--severity-info); color: #000; }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            margin: 0;
+        }
+        
+        /* Progress Bar */
+        .progress {
+            height: 20px;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        .progress-bar {
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Findings Section */
+        .section-title {
+            border-left: 4px solid var(--ai-blue);
+            padding-left: 15px;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: var(--ai-dark);
+        }
+        
+        /* Finding Cards */
+        .finding-card {
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: box-shadow 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .finding-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .finding-header {
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .finding-body {
+            padding: 1.25rem;
+        }
+        .finding-type {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem 0;
+        }
+        .finding-url {
+            word-break: break-all;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+        .finding-payload {
+            background-color: #e9ecef;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            overflow-x: auto;
+        }
+        .finding-detail {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .finding-evidence {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 0.75rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            max-height: 150px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-top: 0.5rem;
+        }
+        
+        /* Severity Colors */
+        .severity-badge {
+            font-size: 0.75rem;
+            padding: 0.3em 0.6em;
+        }
+        .bg-high { background-color: var(--severity-high) !important; color: white !important; }
+        .bg-medium { background-color: var(--severity-medium) !important; color: #000 !important; }
+        .bg-low { background-color: var(--severity-low) !important; color: white !important; }
+        .bg-info { background-color: var(--severity-info) !important; color: #000 !important; }
+        
+        /* No Findings Alert */
+        .no-findings {
+            text-align: center;
+            padding: 3rem 1rem;
+            background-color: #e8f4f8;
+            border-radius: 10px;
+            border: 1px dashed #a8dadc;
+        }
+        .no-findings h4 {
+            color: #1d3557;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+            border-top: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-custom">
+        <div class="container">
+            <h1 class="display-5 fw-bold">🛡️ AI Cyber Agent Vulnerability Report</h1>
+            <p class="lead mb-0">Comprehensive Security Scan Results</p>
+            <p class="mb-0">Generated at: <strong>20250827_163311</strong></p>
+        </div>
+    </div>
+
+    <div class="container">
+        
+            <!-- Summary Stats -->
+            <div class="stats-container">
+                <h2 class="section-title">📊 Executive Summary</h2>
+                <div class="row g-4">
+                    <!-- High Risk -->
+                    <div class="col-md-3">
+                        <div class="card stat-card stat-high h-100">
+                            <div class="stat-card-header text-center">Critical & High</div>
+                            <div class="stat-card-body text-center">
+                                <p class="stat-value">0</p>
+                                <p class="stat-label mb-0">Security Issues</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Medium Risk -->
+                    <div class="col-md-3">
+                        <div class="card stat-card stat-medium h-100">
+                            <div class="stat-card-header text-center">Medium</div>
+                            <div class="stat-card-body text-center">
+                                <p class="stat-value">6</p>
+                                <p class="stat-label mb-0">Severity Issues</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Low Risk -->
+                    <div class="col-md-3">
+                        <div class="card stat-card stat-low h-100">
+                            <div class="stat-card-header text-center">Low</div>
+                            <div class="stat-card-body text-center">
+                                <p class="stat-value">0</p>
+                                <p class="stat-label mb-0">Severity Issues</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Info -->
+                    <div class="col-md-3">
+                        <div class="card stat-card stat-info h-100">
+                            <div class="stat-card-header text-center">Info</div>
+                            <div class="stat-card-body text-center">
+                                <p class="stat-value">0</p>
+                                <p class="stat-label mb-0">Findings</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Risk Distribution Bar -->
+                
+                
+                <div class="mt-4">
+                    <h5 class="text-center mb-3">Risk Distribution</h5>
+                    <div class="progress">
+                        
+                        
+                        <div class="progress-bar bg-medium" role="progressbar" style="width: 100.0%" aria-valuenow="6" aria-valuemin="0" aria-valuemax="6">6</div>
+                        
+                        
+                        
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Findings List -->
+            <div class="findings-container">
+                <h2 class="section-title">🔍 Detailed Findings</h2>
+                
+                <div class="card finding-card">
+                    <div class="finding-header bg-light">
+                        <div>
+                            <span class="badge severity-badge bg-medium">Medium</span>
+                            <span class="finding-type">XSS</span>
+                        </div>
+                        <div>
+                            <small class="text-muted">ID: 1</small>
+                        </div>
+                    </div>
+                   <div class="finding-body">
+    <p class="finding-detail mb-1"><strong>URL:</strong></p>
+    <p class="finding-url mb-2"><a href="http://testphp.vulnweb.com/showimage.php?file=<script>alert(1)</script>" target="_blank" class="text-decoration-none">http://testphp.vulnweb.com/showimage.php?file=<script>alert(1)</script></a></p>
+    
+    <p class="finding-detail mb-1"><strong>Payload:</strong></p>
+    <div class="finding-payload"><script>alert(1)</script></div>
+    
+    <p class="finding-detail mb-1"><strong>Description:</strong></p>
+    <p class="finding-detail mb-2">Reflected XSS vulnerability detected.</p>
+    
+    <p class="finding-detail mb-1"><strong>Evidence:</strong></p>
+    <div class="finding-evidence">Payload '<script>alert(1)</script>' was reflected in the response.</div>
+</div>
+                </div>
+                
+                <div class="card finding-card">
+                    <div class="finding-header bg-light">
+                        <div>
+                            <span class="badge severity-badge bg-medium">Medium</span>
+                            <span class="finding-type">XSS</span>
+                        </div>
+                        <div>
+                            <small class="text-muted">ID: 2</small>
+                        </div>
+                    </div>
+                   <div class="finding-body">
+    <p class="finding-detail mb-1"><strong>URL:</strong></p>
+    <p class="finding-url mb-2"><a href="http://testphp.vulnweb.com/showimage.php?file=<img src=x onerror=alert(1)>" target="_blank" class="text-decoration-none">http://testphp.vulnweb.com/showimage.php?file=<img src=x onerror=alert(1)></a></p>
+    
+    <p class="finding-detail mb-1"><strong>Payload:</strong></p>
+    <div class="finding-payload"><img src=x onerror=alert(1)></div>
+    
+    <p class="finding-detail mb-1"><strong>Description:</strong></p>
+    <p class="finding-detail mb-2">Reflected XSS vulnerability detected.</p>
+    
+    <p class="finding-detail mb-1"><strong>Evidence:</strong></p>
+    <div class="finding-evidence">Payload '<img src=x onerror=alert(1)>' was reflected in the response.</div>
+</div>
+                </div>
+                
+                <div class="card finding-card">
+                    <div class="finding-header bg-light">
+                        <div>
+                            <span class="badge severity-badge bg-medium">Medium</span>
+                            <span class="finding-type">XSS</span>
+                        </div>
+                        <div>
+                            <small class="text-muted">ID: 3</small>
+                        </div>
+                    </div>
+                   <div class="finding-body">
+    <p class="finding-detail mb-1"><strong>URL:</strong></p>
+    <p class="finding-url mb-2"><a href="http://testphp.vulnweb.com/showimage.php?file=<svg/onload=alert(1)>" target="_blank" class="text-decoration-none">http://testphp.vulnweb.com/showimage.php?file=<svg/onload=alert(1)></a></p>
+    
+    <p class="finding-detail mb-1"><strong>Payload:</strong></p>
+    <div class="finding-payload"><svg/onload=alert(1)></div>
+    
+    <p class="finding-detail mb-1"><strong>Description:</strong></p>
+    <p class="finding-detail mb-2">Reflected XSS vulnerability detected.</p>
+    
+    <p class="finding-detail mb-1"><strong>Evidence:</strong></p>
+    <div class="finding-evidence">Payload '<svg/onload=alert(1)>' was reflected in the response.</div>
+</div>
+                </div>
+                
+                <div class="card finding-card">
+                    <div class="finding-header bg-light">
+                        <div>
+                            <span class="badge severity-badge bg-medium">Medium</span>
+                            <span class="finding-type">XSS</span>
+                        </div>
+                        <div>
+                            <small class="text-muted">ID: 4</small>
+                        </div>
+                    </div>
+                   <div class="finding-body">
+    <p class="finding-detail mb-1"><strong>URL:</strong></p>
+    <p class="finding-url mb-2"><a href="http://testphp.vulnweb.com/showimage.php?file=javascript:alert(1)" target="_blank" class="text-decoration-none">http://testphp.vulnweb.com/showimage.php?file=javascript:alert(1)</a></p>
+    
+    <p class="finding-detail mb-1"><strong>Payload:</strong></p>
+    <div class="finding-payload">javascript:alert(1)</div>
+    
+    <p class="finding-detail mb-1"><strong>Description:</strong></p>
+    <p class="finding-detail mb-2">Reflected XSS vulnerability detected.</p>
+    
+    <p class="finding-detail mb-1"><strong>Evidence:</strong></p>
+    <div class="finding-evidence">Payload 'javascript:alert(1)' was reflected in the response.</div>
+</div>
+                </div>
+                
+                <div class="card finding-card">
+                    <div class="finding-header bg-light">
+                        <div>
+                            <span class="badge severity-badge bg-medium">Medium</span>
+                            <span class="finding-type">XSS</span>
+                        </div>
+                        <div>
+                            <small class="text-muted">ID: 5</small>
+                        </div>
+                    </div>
+                   <div class="finding-body">
+    <p class="finding-detail mb-1"><strong>URL:</strong></p>
+    <p class="finding-url mb-2"><a href="http://testphp.vulnweb.com/showimage.php?file=<iframe src=javascript:alert(1)>" target="_blank" class="text-decoration-none">http://testphp.vulnweb.com/showimage.php?file=<iframe src=javascript:alert(1)></a></p>
+    
+    <p class="finding-detail mb-1"><strong>Payload:</strong></p>
+    <div class="finding-payload"><iframe src=javascript:alert(1)></div>
+    
+    <p class="finding-detail mb-1"><strong>Description:</strong></p>
+    <p class="finding-detail mb-2">Reflected XSS vulnerability detected.</p>
+    
+    <p class="finding-detail mb-1"><strong>Evidence:</strong></p>
+    <div class="finding-evidence">Payload '<iframe src=javascript:alert(1)>' was reflected in the response.</div>
+</div>
+                </div>
+                
+                <div class="card finding-card">
+                    <div class="finding-header bg-light">
+                        <div>
+                            <span class="badge severity-badge bg-medium">Medium</span>
+                            <span class="finding-type">IDOR (Potential)</span>
+                        </div>
+                        <div>
+                            <small class="text-muted">ID: 6</small>
+                        </div>
+                    </div>
+                   <div class="finding-body">
+    <p class="finding-detail mb-1"><strong>URL:</strong></p>
+    <p class="finding-url mb-2"><a href="http://testphp.vulnweb.com/showimage.php?file=" target="_blank" class="text-decoration-none">http://testphp.vulnweb.com/showimage.php?file=</a></p>
+    
+    <p class="finding-detail mb-1"><strong>Payload:</strong></p>
+    <div class="finding-payload">Indicator: file</div>
+    
+    <p class="finding-detail mb-1"><strong>Description:</strong></p>
+    <p class="finding-detail mb-2">Potential IDOR vulnerability detected based on URL parameter/path.</p>
+    
+    <p class="finding-detail mb-1"><strong>Evidence:</strong></p>
+    <div class="finding-evidence">URL contains common ID indicator 'file'. Manual verification required.</div>
+</div>
+                </div>
+                
+            </div>
+        
+    </div>
+    
+    <div class="footer">
+        <div class="container">
+            <p class="mb-0">Generated by 0XCAPTURE - Professional Security Scanner</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
