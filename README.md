@@ -106,3 +106,15 @@ python -m cli.cli_app -f examples/targets.txt --proxy http://127.0.0.1:8080 --st
 
 # Scan with a custom delay between requests
 python -m cli.cli_app -f examples/targets.txt --delay 2.5
+```
+## ⚠️ Disclaimer
+
+This tool is intended for **authorized security testing** and **educational purposes only**. Unauthorized scanning of systems is illegal. The user assumes all responsibility for its use.
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](https://raw.githubusercontent.com/capture0x/ai-cyber-agent/refs/heads/main/LICENSE) file for details.
+
+## 📬 Contact
+
+For questions, suggestions, or feedback, please open an issue or contact `info@oxcapture.com`.
