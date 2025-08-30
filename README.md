@@ -100,32 +100,6 @@
     pip install -r gui/requirements-gui.txt
     ```
 
-### Option 2: Install from Source (Recommended for Developers)
-
-1.  **Clone the Repository:**
-    ```bash
-    git clone https://github.com/capture0x/ai-cyber-agent.git  
-    cd ai-cyber-agent
-    ```
-
-2.  **Create a Virtual Environment (Recommended):**
-    ```bash
-    python -m venv venv
-    # Linux/macOS:
-    source venv/bin/activate
-    # Windows:
-    venv\Scripts\activate
-    ```
-
-3.  **Install Dependencies:**
-    ```bash
-    # Core dependencies
-    pip install -r requirements.txt
-
-    # For GUI (if needed)
-    pip install -r gui/requirements-gui.txt
-    ```
-
 ## 🚀 Usage
 
 ### CLI (Command Line Interface)
