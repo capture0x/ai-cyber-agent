@@ -147,4 +147,4 @@ This project is licensed under the MIT License. See the [LICENSE](https://raw.gi
 
 ## 📬 Contact
 
-For questions, suggestions, or feedback, please open an issue or contact `info@oxcapture.com`.
+For questions, suggestions, or feedback, please open an issue or contact `tmrswrr@gmail.com`.
