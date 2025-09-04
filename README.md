@@ -58,7 +58,7 @@
 
 ## 📸 YouTube Video
 
-[![AI Cyber Agent Demo](screenshots/13.png)](https://www.youtube.com/watch?v=VIDEO_ID)
+[![AI Cyber Agent Demo](screenshots/13.png)](https://youtu.be/mtRktmjb3O8)
 
 *Click on the image above to watch the full demo video on YouTube.*
 
